@@ -8,7 +8,7 @@ import { atomOneDark } from "react-syntax-highlighter/styles/hljs";
 import { useTheme, Text } from "react-native-paper";
 
 
-export default function Puzzle() {
+export default function Page() {
 
   const theme = useTheme()
 
