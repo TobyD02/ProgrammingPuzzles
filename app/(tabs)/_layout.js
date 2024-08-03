@@ -1,24 +1,39 @@
-import { Text } from 'react-native';
-import { Redirect, Stack } from 'expo-router';
+import { Text } from "react-native";
+import { Redirect, Stack } from "expo-router";
 
-import { useSession } from '../utils/ctx';
+import { useTheme } from "react-native-paper";
+import { supabase } from "../utils/supabase";
 
 export default function AppLayout() {
-  const { session, isLoading } = useSession();
 
-  // You can keep the splash screen open, or render a loading screen like we do here.
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
-
-  // Only require authentication within the (app) group's layout as users
-  // need to be able to access the (auth) group and sign in again.
-  if (!session) {
-    // On web, static rendering will stop here as the user is not authenticated
-    // in the headless Node process that the pages are rendered in.
-    // return <Redirect href="/(auth)" />;
-  }
+  const theme = useTheme();
 
   // This layout can be deferred because it's not the root layout.
-  return <Stack />;
+  return (
+    <Stack
+      screenOptions={{
+        headerTitleAlign: "center",
+        headerStyle: { backgroundColor: theme.colors.background },
+        headerTitleStyle: theme.fonts.titleMedium,
+      }}>
+      <Stack.Screen
+        name="puzzles"
+        options={{
+          headerShown: true,
+          title: "Puzzles",
+          headerLeft: () => (
+            <IconButton
+              icon="waveform"
+              size={30}
+              style={{ top: "-10%" }}
+              iconColor={theme.colors.primary}
+              onPress={() => {
+                router.replace("/(tabs)");
+              }}
+            />
+          ),
+        }}
+      />
+    </Stack>
+  );
 }
