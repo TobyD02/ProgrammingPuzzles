@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { PaperProvider, MD3DarkTheme as DefaultTheme, TextInput, Text, Button } from "react-native-paper";
 import { SafeAreaView } from "react-native";
 import {router} from "expo-router";
+import { Stack } from "expo-router";
 
 export default function Page() {
 
