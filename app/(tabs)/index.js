@@ -14,7 +14,7 @@ export default function Page() {
   <PaperProvider theme={theme}>
     <SafeAreaView>
       <Text>Main App</Text>
-      <Button onPress={() => router.replace('(tabs)/puzzles')}>Puzzles</Button>
+      <Button onPress={() => router.push('(tabs)/puzzles')}>Puzzles</Button>
     </SafeAreaView>
   </PaperProvider>
   )

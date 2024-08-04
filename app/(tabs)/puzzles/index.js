@@ -3,7 +3,7 @@ import { View, StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import { Card, Text, useTheme } from "react-native-paper";
 import SyntaxHighlighter from "react-native-syntax-highlighter";
 import { atomOneDark } from "react-syntax-highlighter/styles/hljs";
-import { getPuzzleData } from "../../utils/api_interface";
+import { getPuzzleData, pushPuzzle } from "../../utils/api_interface";
 
 import CorrectOrder from "./question_types/correct_order";
 import MissingLine from "./question_types/missing_line";
@@ -19,21 +19,26 @@ export default function Page() {
   const [question, setQuestion] = useState(0);
   const [questionComponents, setQuestionComponents] = useState([])
 
-  useEffect(() => {
+  const newQuestion = () => {
     getPuzzleData().then(({ data, error }) => {
       if (error) {
         console.log("error", error);
       } else {
-        console.log("data: ", data);
-        setQuestionComponents([<MissingLine />, <WhichOutput data={data[0]} />, <WhichDescription />, <CorrectOrder />])
+        setQuestionComponents([<MissingLine data={data} newQuestion={newQuestion} />, <WhichOutput data={data} newQuestion={newQuestion} />, <WhichDescription />, <CorrectOrder />])
         getQuestion(data[0]);
         setLoading(false);
       }
     });
+  }
+
+  useEffect(() => {
+    newQuestion()
   }, []);
 
   const getQuestion = (data) => {
     const questionType = Math.floor(Math.random() * 4); // Randomly select a question type
+
+    setQuestion(questionType)
 
     switch (questionType) {
       case 0: // Missing line of code

@@ -3,6 +3,8 @@ import { Redirect, Stack } from "expo-router";
 
 import { useTheme } from "react-native-paper";
 import { supabase } from "../utils/supabase";
+import { IconButton } from "react-native-paper";
+import { router } from "expo-router"
 
 export default function AppLayout() {
 
@@ -21,6 +23,7 @@ export default function AppLayout() {
         options={{
           headerShown: true,
           title: "Puzzles",
+          animation: "",
           headerLeft: () => (
             <IconButton
               icon="waveform"
@@ -28,7 +31,7 @@ export default function AppLayout() {
               style={{ top: "-10%" }}
               iconColor={theme.colors.primary}
               onPress={() => {
-                router.replace("/(tabs)");
+                router.back();
               }}
             />
           ),
