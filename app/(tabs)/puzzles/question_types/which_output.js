@@ -10,18 +10,32 @@ export default function WhichOutput({ data, newQuestion }) {
   const [loading, setLoading] = useState(true);
   const [correct, setCorrect] = useState({});
 
-  const theme = useTheme()
+  const theme = useTheme();
 
   useEffect(() => {
-    if (data && data.length > 0) {
-      setCorrect(data[0]);
+    // Process lines_of_code to ensure no line exceeds 50 characters)
+    let processedLines = data[0].lines_of_code.map((line) => {
+      if (line.length > 50) {
+        let brokenLines = [];
+        while (line.length > 50) {
+          brokenLines.push(line.slice(0, 50));
+          line = line.slice(50);
+        }
+        brokenLines.push(line);
+        return brokenLines.join("\n");
+      } else {
+        return line;
+      }
+    });
 
-      let a = data.map((d) => d.output_example);
-      a.sort(() => Math.random() - 0.5);
-      setAnswers(a);
+    let updatedData = { ...data[0], lines_of_code: processedLines };
+    setCorrect(updatedData);
 
-      setLoading(false);
-    }
+    let a = data.map((d) => d.output_example);
+    a.sort(() => Math.random() - 0.5);
+    setAnswers(a);
+
+    setLoading(false);
   }, [data]);
 
   const isCorrect = (answer) => {
@@ -33,32 +47,34 @@ export default function WhichOutput({ data, newQuestion }) {
     }
   };
 
-  return (
-    loading ? (
-      <Stack.Screen options={{ title: "Loading..." }} />
-    ) : (
-      <View style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
-        <View style={styles.topHalf}>
-          <Text>Description: {correct.description}</Text>
-          <Text>Input: {correct.input_example && correct.input_example.join(", ")}</Text>
-          <ScrollView contentContainerStyle={styles.scrollContent}>
-            <SyntaxHighlighter language="python" style={atomOneDark} highlighter={"hljs"}>
-              {correct.lines_of_code && correct.lines_of_code.join("\n")}
-            </SyntaxHighlighter>
-          </ScrollView>
-        </View>
-        <View style={styles.bottomHalf}>
-          <Text style={styles.centeredText}>What is the correct output?</Text>
-          <View style={styles.cardContainer}>
-            {answers.map((answer, index) => (
-              <Card key={index} style={styles.card} onPress={() => isCorrect(answer)}>
-                <Text>{answer}</Text>
-              </Card>
-            ))}
-          </View>
+  return loading ? (
+    <Stack.Screen options={{ title: "Loading..." }} />
+  ) : (
+    <View style={[styles.container, { backgroundColor: theme.backgroundColor }]}>
+      <View style={styles.topHalf}>
+        <Text>
+          <Text style={{ fontWeight: "bold" }}>Description:</Text> {correct.description}
+        </Text>
+        <Text>
+          <Text style={{ fontWeight: "bold" }}>Input:</Text> {correct.input_example && correct.input_example.join(", ")}
+        </Text>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <SyntaxHighlighter language="python" style={atomOneDark} highlighter={"hljs"}>
+            {correct.lines_of_code && correct.lines_of_code.join("\n")}
+          </SyntaxHighlighter>
+        </ScrollView>
+      </View>
+      <View style={styles.bottomHalf}>
+        <Text style={styles.centeredText}>What is the correct output?</Text>
+        <View style={styles.cardContainer}>
+          {answers.map((answer, index) => (
+            <Card key={index} style={styles.card} onPress={() => isCorrect(answer)}>
+              <Text>{answer}</Text>
+            </Card>
+          ))}
         </View>
       </View>
-    )
+    </View>
   );
 }
 
@@ -66,7 +82,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 20,
   },
   topHalf: {
     flex: 1,

@@ -21,11 +21,13 @@ export default function Page() {
 
   const newQuestion = () => {
     getPuzzleData().then(({ data, error }) => {
+      // console.log(data, error)
       if (error) {
         console.log("error", error);
       } else {
-        setQuestionComponents([<MissingLine data={data} newQuestion={newQuestion} />, <WhichOutput data={data} newQuestion={newQuestion} />, <WhichDescription />, <CorrectOrder />])
-        getQuestion(data[0]);
+        setQuestionComponents([<MissingLine data={data} newQuestion={newQuestion} />, <WhichOutput data={data} newQuestion={newQuestion} />, <WhichDescription data={data} newQuestion={newQuestion} />, <CorrectOrder />])
+        
+        setQuestion(Math.floor(Math.random() * 4));
         setLoading(false);
       }
     });
@@ -35,71 +37,13 @@ export default function Page() {
     newQuestion()
   }, []);
 
-  const getQuestion = (data) => {
-    const questionType = Math.floor(Math.random() * 4); // Randomly select a question type
-
-    setQuestion(questionType)
-
-    switch (questionType) {
-      case 0: // Missing line of code
-        const answerIndex = Math.floor(Math.random() * data.lines_of_code.length);
-        setAnswer({
-          question_type: 0,
-          question: "What is the missing line of code?",
-          correct_answer: data.lines_of_code[answerIndex],
-          incorrect_answers: data.lines_of_code.filter((_, index) => index !== answerIndex).slice(0, 3)
-        });
-
-        setData({
-          description: data.description,
-          input_example: data.input_example,
-          lines_of_code: data.lines_of_code.filter((_, index) => index !== answerIndex),
-        });
-        break;
-
-      case 1: // What is the output
-        // setAnswer({
-        //   question_type: 1,
-        //   question: "What is the output?",
-        //   correct_answer: data.output_example, // Placeholder
-        //   incorrect_answers: ["incorrect_output1", "incorrect_output2", "incorrect_output3"]
-        // });
-        // setData(data);
-        // break;
-        setQuestion(1)
-
-      case 2: // What is the correct description
-        setAnswer({
-          question_type: 2,
-          question: "What is the correct description?",
-          correct_answer: data.description,
-          incorrect_answers: ["Incorrect description 1", "Incorrect description 2", "Incorrect description 3"]
-        });
-        setData(data);
-        break;
-
-      case 3: // Put the lines of code in correct order
-        setAnswer({
-          question_type: 3,
-          question: "Put the lines of code in the correct order",
-          correct_answer: data.lines_of_code,
-          shuffled_lines: data.lines_of_code.sort(() => Math.random() - 0.5) // Shuffled lines
-        });
-        setData(data);
-        break;
-
-      default:
-        break;
-    }
-  };
-
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Stack.Screen options={{ headerShown: true}} />
-      {!loading ? (
-        <Text>Loading...</Text>
+      {loading ? (
+        <Text>Loading... 1</Text>
       ) : (
-        questionComponents[1]
+        questionComponents[question]
       )}
     </SafeAreaView>
   );
