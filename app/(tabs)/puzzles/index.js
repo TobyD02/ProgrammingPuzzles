@@ -45,7 +45,7 @@ export default function Page() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Stack.Screen options={{ headerShown: true }} />
-      {loading ? <Text>Loading... 1</Text> : questionComponents[question]}
+      {loading ? <Text>Loading... 1</Text> : questionComponents[3]}
     </SafeAreaView>
   );
 }
@@ -83,40 +83,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const prev = () => {
-  return (
-    <View style={styles.topHalf}>
-      <Text>Description: {data.description && data.description}</Text>
-      <Text>Input: {data.input_example && data.input_example.join(", ")}</Text>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <SyntaxHighlighter language="python" style={atomOneDark} highlighter={"hljs"}>
-          {data.lines_of_code && data.lines_of_code.join("\n")}
-        </SyntaxHighlighter>
-      </ScrollView>
-      <View style={styles.bottomHalf}>
-        <Text style={styles.centeredText}>{answer.question}</Text>
-        <View style={styles.cardContainer}>
-          {answer.correct_answer && (
-            <Card style={styles.card}>
-              <Text>Correct Answer: {JSON.stringify(answer.correct_answer)}</Text>
-            </Card>
-          )}
-          {answer.incorrect_answers &&
-            answer.incorrect_answers.map((incorrectAnswer, index) => (
-              <Card key={index} style={styles.card}>
-                <Text>Incorrect Answer: {JSON.stringify(incorrectAnswer)}</Text>
-              </Card>
-            ))}
-          {answer.shuffled_lines &&
-            answer.shuffled_lines.map((line, index) => (
-              <Card key={index} style={styles.card}>
-                <Text>
-                  Line {index + 1}: {line}
-                </Text>
-              </Card>
-            ))}
-        </View>
-      </View>
-    </View>
-  );
-};
+

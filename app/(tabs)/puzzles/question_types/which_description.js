@@ -64,7 +64,7 @@ export default function WhichDesription({ data, newQuestion }) {
     <Stack.Screen options={{ title: `Loading... 2` }} />
   ) : (
     <View style={[styles.container, { backgroundColor: theme.backgroundColor }]}>
-      <View style={styles.topHalf}>
+      <View style={[styles.topHalf, { backgroundColor: theme.backgroundColor }]}>
         <Text>
           <Text style={{ fontWeight: "bold" }}>Input:</Text> {correct.input_example && correct.input_example.join(", ")}
         </Text>

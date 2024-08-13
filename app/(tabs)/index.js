@@ -15,6 +15,7 @@ export default function Page() {
     <SafeAreaView>
       <Text>Main App</Text>
       <Button onPress={() => router.push('(tabs)/puzzles')}>Puzzles</Button>
+      <Button onPress={() => router.push('(tabs)/create_puzzle')}>Create a puzzle</Button>
     </SafeAreaView>
   </PaperProvider>
   )

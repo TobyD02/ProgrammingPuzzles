@@ -1,8 +1,6 @@
-import { Text } from "react-native";
-import { Redirect, Stack } from "expo-router";
+import { Stack } from "expo-router";
 
 import { useTheme } from "react-native-paper";
-import { supabase } from "../utils/supabase";
 import { IconButton } from "react-native-paper";
 import { router } from "expo-router"
 
@@ -23,6 +21,25 @@ export default function AppLayout() {
         options={{
           headerShown: true,
           title: "Puzzles",
+          animation: "",
+          headerLeft: () => (
+            <IconButton
+              icon="waveform"
+              size={30}
+              style={{ top: "-10%" }}
+              iconColor={theme.colors.primary}
+              onPress={() => {
+                router.back();
+              }}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="create_puzzle"
+        options={{
+          headerShown: true,
+          title: "Create A Puzzle",
           animation: "",
           headerLeft: () => (
             <IconButton
